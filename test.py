@@ -4,13 +4,13 @@
 
 import gym
 import multiprocessing
+import time
 
 # Change these as you'd like
 RENDER_GAME = False
-NUM_GAMES = 100
+NUM_GAMES = 10
 
-
-def runGame(gameNum, pipe):
+def runGame(gameNum, results):
     env = gym.make('MsPacman-v0')
     score = 0
     env.reset()
@@ -43,23 +43,28 @@ def runGame(gameNum, pipe):
 
     env.close()
     print("Game " + str(gameNum) + " complete, final score: " + str(score))
-    pipe.send(score)
+    results[gameNum] = score
+
 
 if __name__ == '__main__':
+
     games = []
-    pipes = []
+
+    manager = multiprocessing.Manager()
+    results = manager.dict()
+
     for i in range(NUM_GAMES):
-        recv_end, send_end = multiprocessing.Pipe(False)
-        p = multiprocessing.Process(target=runGame, args=(i,send_end,))
+        p = multiprocessing.Process(target=runGame, args=(i,results,))
         p.start()
         games.append(p)
-        pipes.append(recv_end)
 
     for i in range(NUM_GAMES):
         games[i].join()
 
-    results = [x.recv() for x in pipes]
-    highscore = max(r for r in results)
+    print("All games complete")
+
+    print(results.values())
+    highscore = max(results.values())
     print("High Score: " + str(highscore))
 
 
