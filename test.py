@@ -7,35 +7,38 @@ import multiprocessing
 
 # Change these as you'd like
 RENDER_GAME = False
-NUM_GAMES = 10
+NUM_GAMES = 100
+
 
 def runGame(gameNum, pipe):
     env = gym.make('MsPacman-v0')
     score = 0
-    print(env)
     env.reset()
+    print("Starting game " + str(gameNum))
+
     for k in range(10000):
-        #print(env.render(mode='rgb_array'))
-        if RENDER_GAME:
-            env.render()
+
         action = env.action_space.sample()
         while action not in [0, 2, 3, 4, 5]:
             action = env.action_space.sample()
         result = env.step(action) # take a random action
-        print("Iteration " + str(k) + ", Action: " + str(action) + ", Current Score: " + str(score))
+
         #print(result)
         #print(result.observation)
         #print(result.reward)
         #print(result.done)
         #print(result.info)
         #print(result[0])
-        
+
+        #print(env.render(mode='rgb_array'))
+        if RENDER_GAME:
+            env.render()
+            print("Iteration " + str(k) + ", Action: " + str(action) + ", Current Score: " + str(score))
+
         score = score + result[1]
 
-        if result[1] > 0:
-            print(result[1])
-
-        if result[2] == True:
+        # End Condition
+        if result[2]:
             break
 
     env.close()
