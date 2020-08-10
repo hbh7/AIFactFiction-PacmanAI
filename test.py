@@ -3,16 +3,21 @@
 # sudo apt install python3-opengl
 
 import gym
-from multiprocessing import Process
+import multiprocessing
 
-def runGame(gameNum):
+# Change these as you'd like
+RENDER_GAME = False
+NUM_GAMES = 10
+
+def runGame(gameNum, pipe):
     env = gym.make('MsPacman-v0')
     score = 0
     print(env)
     env.reset()
     for k in range(10000):
         #print(env.render(mode='rgb_array'))
-        env.render()
+        if RENDER_GAME:
+            env.render()
         action = env.action_space.sample()
         while action not in [0, 2, 3, 4, 5]:
             action = env.action_space.sample()
@@ -35,9 +40,23 @@ def runGame(gameNum):
 
     env.close()
     print("Game " + str(gameNum) + " complete, final score: " + str(score))
+    pipe.send(score)
 
 if __name__ == '__main__':
-    for i in range(1):
-        p = Process(target=runGame, args=(i,))
+    games = []
+    pipes = []
+    for i in range(NUM_GAMES):
+        recv_end, send_end = multiprocessing.Pipe(False)
+        p = multiprocessing.Process(target=runGame, args=(i,send_end,))
         p.start()
+        games.append(p)
+        pipes.append(recv_end)
+
+    for i in range(NUM_GAMES):
+        games[i].join()
+
+    results = [x.recv() for x in pipes]
+    highscore = max(r for r in results)
+    print("High Score: " + str(highscore))
+
 
