@@ -6,7 +6,8 @@ model = torch.nn.Sequential(
 )
 
 reward (**args):
-    openAIGym output + custom rule input
+    # Sum of points or points per move?
+    reward = openAIGym output + custom rule input
 
 # Ideal training
 while True:
