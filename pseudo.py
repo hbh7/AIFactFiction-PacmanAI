@@ -5,7 +5,8 @@ model = torch.nn.Sequential(
     ## Output (n move from N moveset)
 )
 
-Reward model:
+reward (**args):
+    openAIGym output + custom rule input
 
 # Ideal training
 while True:
@@ -20,3 +21,6 @@ while True:
     # When Game is over
     reset Game
     iteration_counter++;
+
+save_model():
+    #do saving
