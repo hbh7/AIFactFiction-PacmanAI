@@ -1,7 +1,3 @@
-# pip3 install gym
-# pip3 install gym[atari]
-# sudo apt install python3-opengl
-
 import gym
 import multiprocessing
 import time
