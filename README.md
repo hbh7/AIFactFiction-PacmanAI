@@ -12,8 +12,8 @@
   - Will?
   
 - [ ] Write Training Function
- - Rewrite Lab04 code ( reward / accuracy difference? )
- - Pytorch documentation reading
+  - Rewrite Lab04 code ( reward / accuracy difference? )
+  - Pytorch documentation reading
   
 - [ ] Write Game Integration Function
   - Use model to play game ( run model on input and use chosen ouptut move as PacMan move )
