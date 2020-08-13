@@ -9,12 +9,23 @@ import time
 # Change these as you'd like
 RENDER_GAME = True
 NUM_GAMES = 1
+CUSTOM_SCORING = False
+
+# Custom scoring settings
+NO_SCORE_LIMIT = 87 # Number of frames without getting any points before points are deducted
+TIME_LIMIT = 2900 # Number of frames in a fast play of level 1; if passed, points are deducted
+FRAMES_PER_POINT = 60 # Number of frames that pass before 10 points are deducted
 
 def runGame(gameNum, results):
     env = gym.make('MsPacman-v0')
     score = 0
     env.reset()  # New game
     print("Starting game " + str(gameNum))
+
+    # For custom scoring
+    custom_score = 0
+    lastTimeScored = 0 # Last frame that points were added.
+    lastTimeDeducted = 0 # Last frame that points was deducted.
 
     for k in range(10000):
 
@@ -34,6 +45,20 @@ def runGame(gameNum, results):
             print("Iteration " + str(k) + ", Action: " + str(action) + ", Current Score: " + str(score))
 
         score = score + result[1]  # result[1] is the amount of increase in score from the last step
+        if CUSTOM_SCORING:
+            if result[1] > 0:
+                custom_score = custom_score + result[1]
+                lastTimeScored = k
+            else:
+                if k - lastTimeScored >= lastTimeScored:
+                    if k - lastTimeDeducted >= FRAMES_PER_POINT:
+                        lastTimeDeducted = k
+                        custom_score = custom_score - 10
+            if k > TIME_LIMIT:
+                if k - lastTimeDeducted >= FRAMES_PER_POINT:
+                    lastTimeDeducted = k
+                    custom_score = custom_score - 10
+            
 
         # End Condition
         if result[2]:  # set to True once all lives are used up and ms pacman dies
@@ -41,7 +66,20 @@ def runGame(gameNum, results):
 
     env.close()  #
     print("Game " + str(gameNum) + " complete, final score: " + str(score))
-    results[gameNum] = score
+    if CUSTOM_SCORING:
+        print("Custom score for game " + str(gameNum) + ": " + str(custom_score))
+
+    if not CUSTOM_SCORING:
+        results[gameNum] = score
+    else:
+        # If custom scoring is on, instead create a variable containing the game score, custom score,
+        # and game number (to make comparing max and min games easier).
+        results[gameNum] = {
+            'game' : gameNum,
+            'score' : score,
+            'custom_score' : custom_score,
+            'moves' : k
+        }
 
 
 if __name__ == '__main__':
@@ -62,7 +100,30 @@ if __name__ == '__main__':
     print("All games complete")
 
     print(results.values())
-    highscore = max(results.values())
-    print("High Score: " + str(highscore))
-
-
+    if not CUSTOM_SCORING:
+        highscore = max(results.values())
+        print("High Score: " + str(highscore))
+    else:
+        # Print highest scoring games.
+        highscoring_game = max(results.values(), key=lambda item: item['score'])
+        custom_highscoring_game = max(results.values(), key=lambda item: item['custom_score'])
+        print("Highest Scoring Game: Game " + str(highscoring_game['game']))
+        print("\tNumber of Moves: " + str(highscoring_game['moves']))
+        print("\tScore: " + str(highscoring_game['score']))
+        print("\tCustom Score: " + str(highscoring_game['custom_score']))
+        print("Highest Custom Scoring Game: Game " + str(custom_highscoring_game['game']))
+        print("\tNumber of Moves: " + str(custom_highscoring_game['moves']))
+        print("\tScore: " + str(custom_highscoring_game['score']))
+        print("\tCustom Score: " + str(custom_highscoring_game['custom_score']))
+        # Print lowest scoring games.
+        lowscoring_game = min(results.values(), key=lambda item: item['score'])
+        custom_lowscoring_game = min(results.values(), key=lambda item: item['custom_score'])
+        print("Lowest Scoring Game: Game " + str(lowscoring_game['game']))
+        print("\tNumber of Moves: " + str(lowscoring_game['moves']))
+        print("\tScore: " + str(lowscoring_game['score']))
+        print("\tCustom Score: " + str(lowscoring_game['custom_score']))
+        print("Lowest Custom Scoring Game: Game " + str(custom_lowscoring_game['game']))
+        print("\tNumber of Moves: " + str(custom_lowscoring_game['moves']))
+        print("\tScore: " + str(custom_lowscoring_game['score']))
+        print("\tCustom Score: " + str(custom_lowscoring_game['custom_score']))
+        
