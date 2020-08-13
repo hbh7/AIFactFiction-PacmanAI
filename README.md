@@ -4,10 +4,8 @@
 
 1. [ ] Write Model
 
-  > Based on / assisted by Microsoft analysis
-  
+  > Based on / assisted by Microsoft analysis  
   > v0.1 by EOD 14/06/2020
-  
   > Ivan?
   
 2. [ ] Write Reward Function
