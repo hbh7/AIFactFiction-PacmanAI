@@ -54,6 +54,6 @@ Adapted from https://medium.com/swlh/get-wsl2-working-on-windows-10-2ee84ef8ed43
 16. You should now have success! Hopefully anyways
 
 ## Notes
-* Due to the model is built as a function with its weights stored in a dictionary and not a tensorflow model subclass, saving and loading it is implausible. Due to time constraints rewriting it into a tensorflow model subclass (easy), update the training to use the new format (manageable) and debugging the inevitbale issues (hard) is also implausible.
+* Since the model is built as a function with its weights stored in a dictionary and not a tensorflow model subclass, saving and loading it is implausible. Due to time constraints rewriting it into a tensorflow model subclass (easy), update the training to use the new format (manageable) and debugging the inevitbale issues (hard) is also implausible.
 * The penalty fo time spent in a level could not be implemented as OpenAIGym does not return level information
 * In order to optimize parameters one variable must be changed at a time and then the model must be retrained. This is unfeasible to to how long it takes to train the model, ≈10 games per minute * > 600s of games > 1hour per parameter.
