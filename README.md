@@ -53,6 +53,18 @@ Adapted from https://medium.com/swlh/get-wsl2-working-on-windows-10-2ee84ef8ed43
 
 16. You should now have success! Hopefully anyways
 
+## Implementation
+* 1.x Tensorflow Colab Notebook implementation based on https://github.com/EXJUSTICE/Deep_Q-learning_OpenAI_MissPacman
+
+## Changes
+* Set to tensorflow 1.x version
+* Improve preprocessing by cropping more closely to game screen
+* Added GPU capabilities
+* Removed TensorBoard data collection [ histograms and logs ]
+* Increased initial exploration to over 50%
+* 5x learning rate
+* Custom scoring will subtract 10 point every second after 1.45 seconds where no points are obtained
+
 ## Notes
 * Since the model is built as a function with its weights stored in a dictionary and not a tensorflow model subclass, saving and loading it is implausible. Due to time constraints rewriting it into a tensorflow model subclass (easy), update the training to use the new format (manageable) and debugging the inevitbale issues (hard) is also implausible.
 * The penalty fo time spent in a level could not be implemented as OpenAIGym does not return level information
