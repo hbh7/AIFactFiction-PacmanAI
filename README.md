@@ -54,7 +54,7 @@ Adapted from https://medium.com/swlh/get-wsl2-working-on-windows-10-2ee84ef8ed43
 16. You should now have success! Hopefully anyways
 
 ## Implementation
-* 1.x Tensorflow Colab Notebook implementation based on https://github.com/EXJUSTICE/Deep_Q-learning_OpenAI_MissPacman
+#### 1.x Tensorflow Colab Notebook implementation based on https://github.com/EXJUSTICE/Deep_Q-learning_OpenAI_MissPacman
 
 ## Changes
 * Set to tensorflow 1.x version
